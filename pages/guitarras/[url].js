@@ -1,9 +1,29 @@
 import Image from "next/image";
+import { useState } from "react";
 import Layout from "../../components/layout";
 import styles from "../../styles/guitarras.module.css";
 
-export default function Producto({ guitarra }) {
+export default function Producto({ guitarra, agregarCarrito }) {
+  const [cantidad, setCantidad] = useState(0);
   const { nombre, descripcion, imagen, precio } = guitarra[0].attributes;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (cantidad < 1) {
+      alert(`Cantidad no válida`);
+      return;
+    }
+    //construir un objeto 
+    const guitarraSeleccionada = {
+      id: guitarra[0].id,
+      imagen: imagen.data.attributes.url,
+      nombre,
+      precio,
+      cantidad,
+    }
+    //pasando la informacion
+    agregarCarrito(guitarraSeleccionada);
+  };
+
   return (
     <Layout title={`Guitarra ${nombre}`}>
       <div className={styles.guitarra}>
@@ -18,11 +38,14 @@ export default function Producto({ guitarra }) {
           <h3>{nombre}</h3>
           <p className={styles.descripcion}>{descripcion}</p>
           <p className={styles.precio}>${precio}</p>
-          <form>
-            <label htmlFor="cantidad">
-              Cantidad:
-            </label>
-            <select id="cantidad">
+          <form className={styles.formulario} onSubmit={handleSubmit}>
+            <label htmlFor="cantidad">Cantidad:</label>
+            <select
+              id="cantidad"
+              onChange={(e) => {
+                setCantidad(+e.target.value);
+              }}
+            >
               <option value="0">-- Seleccione --</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -30,6 +53,7 @@ export default function Producto({ guitarra }) {
               <option value="4">4</option>
               <option value="5">5</option>
             </select>
+            <input type="submit" value="Agregar al carrito" />
           </form>
         </div>
       </div>
