@@ -9,7 +9,7 @@ export default function Producto({ guitarra, agregarCarrito }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (cantidad < 1) {
-      alert(`Cantidad no válida`);
+      alert(`Cantidad no valida`);
       return;
     }
     //construir un objeto 
